@@ -65,6 +65,11 @@ class OrganizationRules extends React.Component<Props, State> {
             <Header onClick={this.handleToggleCollapsed}>
               <div>{t('Organization Rules')}</div>
               <Button
+                label={
+                  isCollapsed
+                    ? t('Expand Organization Rules')
+                    : t('Collapse Organization Rules')
+                }
                 icon={<IconChevron size="xs" direction={isCollapsed ? 'down' : 'up'} />}
                 size="xsmall"
                 labelClassName={classNamesCss`
