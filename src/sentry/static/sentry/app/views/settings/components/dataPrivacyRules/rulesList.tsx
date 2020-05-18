@@ -34,13 +34,19 @@ const RulesList = React.forwardRef<HTMLUListElement, Props>(function RulesList(
             </TextOverflow>
             {onShowEditRuleModal && (
               <Button
+                label={t('Edit Rule')}
                 size="small"
                 onClick={onShowEditRuleModal(id)}
                 icon={<IconEdit />}
               />
             )}
             {onDeleteRule && (
-              <Button size="small" onClick={onDeleteRule(id)} icon={<IconDelete />} />
+              <Button
+                label={t('Delete Rule')}
+                size="small"
+                onClick={onDeleteRule(id)}
+                icon={<IconDelete />}
+              />
             )}
           </ListItem>
         );
