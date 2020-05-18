@@ -53,7 +53,9 @@ class OrgRules extends React.Component<Props, State> {
 
     if (rules.length === 0) {
       return (
-        <Wrapper>{t('There are no data privacy rules at the organization level')}</Wrapper>
+        <Wrapper>
+          {t('There are no data privacy rules at the organization level')}
+        </Wrapper>
       );
     }
     return (
