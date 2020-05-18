@@ -19,7 +19,7 @@ type State = {
   contentHeight?: string;
 };
 
-class OrgRules extends React.Component<Props, State> {
+class OrganizationRules extends React.Component<Props, State> {
   state: State = {
     isCollapsed: true,
   };
@@ -82,7 +82,7 @@ class OrgRules extends React.Component<Props, State> {
   }
 }
 
-export default OrgRules;
+export default OrganizationRules;
 
 const Content = styled('div')`
   transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -103,20 +103,14 @@ const Wrapper = styled('div')<{isCollapsed?: boolean; contentHeight?: string}>`
   font-size: ${p => p.theme.fontSizeMedium};
   color: ${p => p.theme.gray1};
   background: ${p => p.theme.offWhite};
-  ${p =>
-    !p.contentHeight &&
-    css`
-      padding: ${space(1)} ${space(2)};
-    `};
+  ${p => !p.contentHeight && `padding: ${space(1)} ${space(2)}`};
+  ${p => !p.isCollapsed && ` border-bottom: 1px solid ${p.theme.borderDark}`};
   ${p =>
     !p.isCollapsed &&
+    p.contentHeight &&
     css`
-      border-bottom: 1px solid ${p.theme.borderDark};
-      ${p.contentHeight &&
-        css`
-          ${Content} {
-            height: ${p.contentHeight};
-          }
-        `}
+      ${Content} {
+        height: ${p.contentHeight};
+      }
     `}
 `;

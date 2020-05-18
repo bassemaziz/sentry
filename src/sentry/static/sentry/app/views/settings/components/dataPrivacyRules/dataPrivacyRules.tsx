@@ -14,7 +14,7 @@ import {defaultSuggestions as sourceDefaultSuggestions} from './dataPrivacyRules
 import DataPrivacyRulesModal from './dataPrivacyRulesModal';
 import DataPrivacyRulesPanelContent from './dataPrivacyRulesContent';
 import DataPrivacyRulesPanelForm from './dataPrivacyRulesForm/dataPrivacyRulesForm';
-import OrgRules from './orgRules';
+import OrganizationRules from './organizationRules';
 import {Rule, RuleType, MethodType, EventIdStatus} from './types';
 
 const ADVANCED_DATASCRUBBING_LINK =
@@ -67,7 +67,6 @@ class DataPrivacyRules extends React.Component<Props, State> {
     rules: [],
     savedRules: [],
     relayPiiConfig: this.props.relayPiiConfig,
-    isProjectLevel: this.props.endpoint.includes('projects'),
     sourceSuggestions: [],
     eventId: {
       value: '',
@@ -95,9 +94,8 @@ class DataPrivacyRules extends React.Component<Props, State> {
 
   loadOrganizationRules = () => {
     const {organization} = this.props;
-    const {isProjectLevel} = this.state;
 
-    if (isProjectLevel) {
+    if (this.isProjectLevel()) {
       try {
         const convertedRules = this.convertRelayPiiConfig(organization.relayPiiConfig);
         this.setState({
@@ -120,6 +118,8 @@ class DataPrivacyRules extends React.Component<Props, State> {
       addErrorMessage(t('Unable to load the rules'));
     }
   }
+
+  isProjectLevel = () => this.props.endpoint.includes('projects');
 
   convertRelayPiiConfig = (relayPiiConfig?: string) => {
     const piiConfig = relayPiiConfig ? JSON.parse(relayPiiConfig) : {};
@@ -269,14 +269,10 @@ class DataPrivacyRules extends React.Component<Props, State> {
         data: {relayPiiConfig},
       })
       .then(result => {
-        this.setState(
-          {
-            relayPiiConfig,
-          },
-          () => {
-            onSubmitSuccess(result);
-          }
-        );
+        onSubmitSuccess(result);
+        this.setState({
+          relayPiiConfig,
+        });
       })
       .then(() => {
         addSuccessMessage(t('Successfully saved data privacy rules'));
@@ -389,14 +385,7 @@ class DataPrivacyRules extends React.Component<Props, State> {
 
   render() {
     const {additionalContext, disabled} = this.props;
-    const {
-      rules,
-      sourceSuggestions,
-      showAddRuleModal,
-      eventId,
-      orgRules,
-      isProjectLevel,
-    } = this.state;
+    const {rules, sourceSuggestions, showAddRuleModal, eventId, orgRules} = this.state;
 
     return (
       <React.Fragment>
@@ -416,7 +405,7 @@ class DataPrivacyRules extends React.Component<Props, State> {
             })}
           </PanelAlert>
           <PanelBody>
-            {isProjectLevel && <OrgRules rules={orgRules} />}
+            {this.isProjectLevel() && <OrganizationRules rules={orgRules} />}
             <DataPrivacyRulesPanelContent
               rules={rules}
               onDeleteRule={this.handleDeleteRule}
